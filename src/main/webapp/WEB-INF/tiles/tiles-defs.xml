@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+
+    <definition name="login" template="/WEB-INF/jsp/login.jsp"/>
+    <definition name="home" template="/WEB-INF/jsp/home.jsp"/>
+
+    <!-- Monta a página "base", utilizando a página laytout-->
+    <definition name="base.definition" template="/WEB-INF/jsp/layout.jsp"/>
+
+    <!-- Define a página lista, herdando a base e adicionado os "parâmetros" da base -->
+    <definition name="lista" extends="base.definition" >
+        <put-attribute name="titulo_aba" value="Lista de Dados" />
+        <put-attribute name="titulo_pagina" value="Lista Dados" />
+        <put-attribute name="sub_titulo_pagina" value="Lista Todos os Dados Cadastradas" />
+        <put-attribute name="conteudo_pagina" value="/WEB-INF/jsp/lista.jsp" />
+    </definition>
+
+</tiles-definitions>
+
