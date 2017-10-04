@@ -39,9 +39,11 @@
             <a class="navbar-brand" href="#">Coin Counter</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right">
-                <a href="login"><button type="button" class="btn btn-primary">Login</button></a>
-            </form>
+            <c:if test="${usuarioLogado == null}">
+                <form class="navbar-form navbar-right">
+                    <a href="login"><button type="button" class="btn btn-primary">Login</button></a>
+                </form>
+            </c:if>
         </div><!--/.navbar-collapse -->
     </div>
 </nav>

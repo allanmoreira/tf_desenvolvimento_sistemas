@@ -34,9 +34,9 @@
             </list>
         </property>
     </bean>
-    <!--
+
     <mvc:interceptors>
         <bean class= "interceptador.AutorizadorInterceptor" />
     </mvc:interceptors>
-    -->
+
 </beans>

@@ -26,19 +26,23 @@
 <div class="container">
 
     <form class="form-signin">
-        <h2 class="form-signin-heading">Informe seu Login</h2>
+        <h2 class="form-signin-heading">Registre-se</h2>
+        <label class="sr-only">Nome</label>
+        <input type="text" id="nome" class="form-control" placeholder="Informe o seu nome..." required autofocus>
+
         <label class="sr-only">Email</label>
-        <input type="email" id="email" class="form-control" placeholder="Email" required autofocus>
+        <input type="email" id="email" class="form-control" placeholder="Informe o seu email" required>
+
         <label class="sr-only">Senha</label>
-        <input type="password" id="senha" class="form-control" placeholder="Senha" required>
+        <input type="password" id="senha" class="form-control" placeholder="Informe a sua senha" required>
+
         <div class="checkbox">
             <label>
                 <input type="checkbox" value="remember-me"> Lembrar meu usuário e senha
             </label>
-
         </div>
-        <label><a href="registro">Não possui conta? Cadastre-se</a></label>
-        <button class="btn btn-lg btn-primary btn-block" id="btn_logar" type="button">Login</button>
+
+        <button class="btn btn-lg btn-primary btn-block" id="btn_registrar" type="button">Registrar</button>
     </form>
 
 </div> <!-- /container -->
@@ -49,6 +53,6 @@
 <script src="<c:url value="/static/plugins/bootstrap-notify.js"/>"></script>
 <script src="<c:url value="/static/plugins/notificacao.js"/>"></script>
 <script src="<c:url value="/static/plugins/loading_ajax.js"/>"></script>
-<script src="<c:url value="/static/js_paginas/login.js"/>"></script>
+<script src="<c:url value="/static/js_paginas/registro.js"/>"></script>
 </body>
 </html>

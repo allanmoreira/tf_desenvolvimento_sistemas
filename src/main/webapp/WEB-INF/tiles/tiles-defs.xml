@@ -5,6 +5,7 @@
 <tiles-definitions>
 
     <definition name="login" template="/WEB-INF/jsp/login.jsp"/>
+    <definition name="registro" template="/WEB-INF/jsp/registro.jsp"/>
     <definition name="home" template="/WEB-INF/jsp/home.jsp"/>
 
     <!-- Monta a página "base", utilizando a página laytout-->

@@ -55,12 +55,12 @@
             </ul>
             <ul class="nav navbar-nav pull-right">
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Nome Usuário <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${usuarioLogado.nome} <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="#">Action</a></li>
                     <li><a href="#">Another action</a></li>
                     <li><a href="#">Something else here</a></li>
-                    <li><a href="#">Logout</a></li>
+                    <li><a href="logout">Logout</a></li>
                 </ul>
             </li>
         </div><!--/.navbar-collapse -->
@@ -91,5 +91,8 @@
 <script src="<c:url value="/static/js/bootstrap.min.js"/>"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="<c:url value="/static/js/ie10-viewport-bug-workaround.js"/>"></script>
+<script src="<c:url value="/static/plugins/bootstrap-notify.js"/>"></script>
+<script src="<c:url value="/static/plugins/notificacao.js"/>"></script>
+<script src="<c:url value="/static/plugins/loading_ajax.js"/>"></script>
 </body>
 </html>

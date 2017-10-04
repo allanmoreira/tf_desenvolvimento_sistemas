@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+
 /**
  *
  * @author allan
@@ -22,6 +24,19 @@ public class PaginasServlet {
     public ModelAndView login() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("login");
+        return mv;
+    }
+
+    @RequestMapping(value="logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:login";
+    }
+
+    @RequestMapping("registro")
+    public ModelAndView registro() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("registro");
         return mv;
     }
 
