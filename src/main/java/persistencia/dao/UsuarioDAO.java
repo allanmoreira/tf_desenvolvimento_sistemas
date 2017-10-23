@@ -16,7 +16,7 @@ public class UsuarioDAO {
         //language=MySQL
         String sql =
                 "INSERT INTO " +
-                    "usuario (nome, email, senha) " +
+                    "USUARIOS (Nome, Email, Senha) " +
                 "VALUES (?, ?, ?)";
         try (Connection conexao = MySQLConexao.conectar()) {
             try (PreparedStatement preparedStatement = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -40,12 +40,12 @@ public class UsuarioDAO {
         //language=MySQL
         String sql =
                 "SELECT "+
-                    "id_usuario, nome, email, senha "+
+                    "idUsuario, Nome, Email, Senha "+
                 "FROM "+
-                    "usuario " +
+                    "USUARIOS " +
                 "WHERE "+
-                    "email = ? AND " +
-                    "senha = ?";
+                    "Email = ? AND " +
+                    "Senha = ?";
         try (Connection conexao = MySQLConexao.conectar()) {
             try (PreparedStatement preparedStatement = conexao.prepareStatement(sql)) {
                 preparedStatement.setString(1, email);
@@ -73,11 +73,11 @@ public class UsuarioDAO {
         //language=MySQL
         String sql =
                 "SELECT "+
-                    "email "+
+                    "Email "+
                 "FROM "+
-                    "usuario " +
+                    "USUARIOS " +
                 "WHERE "+
-                    "email = ?";
+                    "Email = ?";
         try (Connection conexao = MySQLConexao.conectar()) {
             try (PreparedStatement preparedStatement = conexao.prepareStatement(sql)) {
                 preparedStatement.setString(1, email);
