@@ -21,7 +21,7 @@ import java.util.Map;
 public class LoginServlet {
 
     @RequestMapping(value="registrar_usuario", method = RequestMethod.POST)
-    public void visualizarAtendimento(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void registrarUsuario(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Object> map = new HashMap<>();
         boolean isValid = false;
         String msgErro = null;

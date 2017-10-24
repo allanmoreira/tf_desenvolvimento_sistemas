@@ -53,10 +53,10 @@ public class UsuarioDAO {
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if(resultSet.next()){
                         usuario = new Usuario(
-                                resultSet.getInt("id_usuario"),
-                                resultSet.getString("nome"),
-                                resultSet.getString("email"),
-                                resultSet.getString("senha")
+                                resultSet.getInt("idUsuario"),
+                                resultSet.getString("Nome"),
+                                resultSet.getString("Email"),
+                                resultSet.getString("Senha")
                         );
                     }
                 }

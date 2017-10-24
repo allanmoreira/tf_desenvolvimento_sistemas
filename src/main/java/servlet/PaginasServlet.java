@@ -40,10 +40,10 @@ public class PaginasServlet {
         return mv;
     }
 
-    @RequestMapping("lista")
-    public ModelAndView lista() {
+    @RequestMapping("consulta_moeda")
+    public ModelAndView consultaMoeda() {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("lista");
+        mv.setViewName("consulta_moeda");
         return mv;
     }
 
