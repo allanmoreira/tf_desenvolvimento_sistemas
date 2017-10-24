@@ -102,9 +102,6 @@
 <script src="<c:url value="/static/js/bootstrap.min.js"/>"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="<c:url value="/static/js/ie10-viewport-bug-workaround.js"/>"></script>
-
-<script src="<c:url value="/static/plugins/bootstrap-notify.js"/>"></script>
-<script src="<c:url value="/static/plugins/notificacao.js"/>"></script>
 <script type="application/javascript">
     $('#link_logout').click(function(){
         window.location = 'logout';
