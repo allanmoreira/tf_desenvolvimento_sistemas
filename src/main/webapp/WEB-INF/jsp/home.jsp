@@ -38,13 +38,23 @@
             </button>
             <a class="navbar-brand" href="#">Coin Counter</a>
         </div>
+
         <div id="navbar" class="navbar-collapse collapse">
-            <c:if test="${usuarioLogado == null}">
+            <c:choose>
+                <c:when test="${usuarioLogado == null}">
                 <form class="navbar-form navbar-right">
                     <a href="login"><button type="button" class="btn btn-primary">Login</button></a>
                 </form>
-            </c:if>
-        </div><!--/.navbar-collapse -->
+                </c:when>
+                <c:otherwise>
+                    <ul class="nav navbar-nav pull-right">
+                        <li class="dropdown">
+                            <a href="#" id="link_logout" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Logout</a>
+                        </li>
+                    </ul>
+                </c:otherwise>
+            </c:choose>
+        </div>
     </div>
 </nav>
 
@@ -53,7 +63,7 @@
     <div class="container">
         <h1>Hello, world!</h1>
         <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-lg" href="lista">Lista de Dados &raquo;</a></p>
+        <p><a class="btn btn-primary btn-lg" href="consulta_moeda">Buscar Moedas &raquo;</a></p>
     </div>
 </div>
 
@@ -92,5 +102,13 @@
 <script src="<c:url value="/static/js/bootstrap.min.js"/>"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="<c:url value="/static/js/ie10-viewport-bug-workaround.js"/>"></script>
+
+<script src="<c:url value="/static/plugins/bootstrap-notify.js"/>"></script>
+<script src="<c:url value="/static/plugins/notificacao.js"/>"></script>
+<script type="application/javascript">
+    $('#link_logout').click(function(){
+        window.location = 'logout';
+    });
+</script>
 </body>
 </html>
