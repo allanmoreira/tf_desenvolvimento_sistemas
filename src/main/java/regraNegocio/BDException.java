@@ -1,4 +1,4 @@
-package regra_negocio;
+package regraNegocio;
 
 public class BDException extends Exception {
     public BDException(String message) {

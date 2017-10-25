@@ -6,34 +6,21 @@
 </div>
 
 <div class="row">
-    <div class="table-responsive">
-        <table class="table table-striped" id="tabela_moedas">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Header</th>
-                <th>Header</th>
-                <th>Header</th>
-                <th>Header</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>1,001</td>
-                <td>Lorem</td>
-                <td>ipsum</td>
-                <td>dolor</td>
-                <td>sit</td>
-            </tr>
-            <tr>
-                <td>1,002</td>
-                <td>amet</td>
-                <td>consectetur</td>
-                <td>adipiscing</td>
-                <td>elit</td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="col-sm-6">
+        <!-- Classic Chart Block -->
+        <div class="block full">
+            <!-- Classic Chart Title -->
+            <div class="block-title">
+                <h2>Classic</h2>
+            </div>
+            <!-- END Classic Chart Title -->
+
+            <!-- Classic Chart Content -->
+            <!-- Flot Charts (initialized in js/pages/compCharts.js), for more examples you can check out http://www.flotcharts.org/ -->
+            <div id="chart-classic" style="height: 380px;"></div>
+            <!-- END Classic Chart Content -->
+        </div>
+        <!-- END Classic Chart Block -->
     </div>
 </div>
 

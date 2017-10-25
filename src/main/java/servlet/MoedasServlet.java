@@ -5,10 +5,11 @@ import com.google.gson.GsonBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import persistencia.modelos.HistoricoMoeda;
 import persistencia.modelos.Moeda;
-import regra_negocio.BDException;
-import regra_negocio.MoedaControle;
-import regra_negocio.ValidacaoException;
+import regraNegocio.BDException;
+import regraNegocio.MoedaControle;
+import regraNegocio.ValidacaoException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,19 +49,17 @@ public class MoedasServlet {
     }
 
     @RequestMapping(value="historico_moeda", method = RequestMethod.POST)
-    public void historicoMoeda(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void historicoMoeda(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Object> map = new HashMap<>();
         boolean isValid = false;
         String msgErro = null;
-        List<Moeda> listaHistoricoMoeda = null;
+        List<HistoricoMoeda> listaHistoricoMoeda = null;
 
         String idMoeda = request.getParameter("id_moeda");
-        String periodo = request.getParameter("periodo");
-        String limite = request.getParameter("limite");
         MoedaControle moedaControle = new MoedaControle();
 
         try {
-            listaHistoricoMoeda = moedaControle.buscaHistoricoMoeda(idMoeda, periodo, limite);
+            listaHistoricoMoeda = moedaControle.buscaHistoricoMoeda(idMoeda);
             isValid = true;
         } catch (ValidacaoException | BDException e) {
             msgErro = e.getMessage();
@@ -68,7 +67,7 @@ public class MoedasServlet {
 
         map.put("isValid", isValid);
         map.put("msgErro", msgErro);
-        map.put("listaMoedas", listaHistoricoMoeda);
+        map.put("listaHistoricoMoeda", listaHistoricoMoeda);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();

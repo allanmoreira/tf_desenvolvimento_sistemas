@@ -1,4 +1,4 @@
-package regra_negocio;
+package regraNegocio;
 
 public class ValidacaoException extends Exception {
     public ValidacaoException(String message) {

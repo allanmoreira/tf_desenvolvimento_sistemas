@@ -49,7 +49,7 @@ CREATE TABLE HISTORICO_MOEDA (
     valorBaixa DECIMAL(21,10) NOT NULL,
     volumeMoeda DECIMAL(21,10) NOT NULL,
     volumeBTC DECIMAL(21,10) NOT NULL,
-    data_historico DATE,
+    dataHistorico DATE,
     CONSTRAINT historico_pk PRIMARY KEY (idHistoricoMoeda),
     CONSTRAINT fk_moeda_historico FOREIGN KEY (idMoeda) REFERENCES MOEDAS(idMoeda)
 );
@@ -59,4 +59,3 @@ INSERT INTO MOEDAS (idMoeda, Nome, Sigla, Valor) VALUES (2, 'Reddcoin', 'RDD', 0
 INSERT INTO MOEDAS (idMoeda, Nome, Sigla, Valor) VALUES (3, 'BitcoinCash', 'BCH', 0.05821169);
 INSERT INTO MOEDAS (idMoeda, Nome, Sigla, Valor) VALUES (4, 'Ethereum', 'ETH', 0.05427384);
 INSERT INTO MOEDAS (idMoeda, Nome, Sigla, Valor) VALUES (5, 'Safe Exchange', 'LTC', 0.00000171);
-

@@ -78,6 +78,7 @@
 <script src="<c:url value="/static/plugins/bootstrap-notify.js"/>"></script>
 <script src="<c:url value="/static/plugins/notificacao.js"/>"></script>
 <script src="<c:url value="/static/plugins/loading_ajax.js"/>"></script>
+<script src="<c:url value="/static/plugins/plugins.js"/>"></script>
 
 <div class="container">
     <div class="row">

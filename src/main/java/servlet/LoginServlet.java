@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import persistencia.modelos.Usuario;
-import regra_negocio.BDException;
-import regra_negocio.LoginControle;
-import regra_negocio.ValidacaoException;
+import regraNegocio.BDException;
+import regraNegocio.LoginControle;
+import regraNegocio.ValidacaoException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

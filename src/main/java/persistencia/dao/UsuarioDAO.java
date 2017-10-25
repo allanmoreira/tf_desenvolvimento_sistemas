@@ -3,7 +3,7 @@ package persistencia.dao;
 import org.apache.log4j.Logger;
 import persistencia.MySQLConexao;
 import persistencia.modelos.Usuario;
-import regra_negocio.BDException;
+import regraNegocio.BDException;
 
 import java.sql.*;
 

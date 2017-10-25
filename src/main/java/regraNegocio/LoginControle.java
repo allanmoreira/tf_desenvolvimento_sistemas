@@ -1,4 +1,4 @@
-package regra_negocio;
+package regraNegocio;
 
 import persistencia.dao.UsuarioDAO;
 import persistencia.modelos.Usuario;
