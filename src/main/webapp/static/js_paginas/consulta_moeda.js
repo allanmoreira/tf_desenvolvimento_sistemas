@@ -108,6 +108,7 @@ $('#btn_buscar').click(function(){
                 var lista = data.listaPeriodoHistorico;
                 var nomeMoeda = select_moeda.find(":selected").text();
                 var txtPeriodo = select_periodo.find(":selected").text();
+                $('#sub_titulo_pagina').html(nomeMoeda);
                 var listaLabels = [];
                 var listaDadosFechamento = [];
                 var listaDadosVolume = [];

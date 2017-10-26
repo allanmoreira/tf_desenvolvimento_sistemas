@@ -83,7 +83,7 @@
 <div class="container">
     <div class="row">
         <h2 class="sub-header"><tiles:insertAttribute name="titulo_pagina" /></h2>
-        <h4 class="subtitulo"><tiles:insertAttribute name="sub_titulo_pagina" /></h4>
+        <h4 class="subtitulo" id="sub_titulo_pagina"><tiles:insertAttribute name="sub_titulo_pagina" /></h4>
     </div>
 
     <tiles:insertAttribute name="conteudo_pagina" />

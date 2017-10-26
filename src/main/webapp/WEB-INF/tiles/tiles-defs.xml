@@ -13,9 +13,9 @@
 
     <!-- Define a página lista, herdando a base e adicionado os "parâmetros" da base -->
     <definition name="consulta_moeda" extends="layout_base" >
-        <put-attribute name="titulo_aba" value="Lista de Dados" />
-        <put-attribute name="titulo_pagina" value="Lista Dados" />
-        <put-attribute name="sub_titulo_pagina" value="Lista Todos os Dados Cadastradas" />
+        <put-attribute name="titulo_aba" value="Buscar Moeda" />
+        <put-attribute name="titulo_pagina" value="Buscar Histórico de Moeda" />
+        <put-attribute name="sub_titulo_pagina" value="Selecione uma moeda" />
         <put-attribute name="conteudo_pagina" value="/WEB-INF/jsp/consulta_moeda.jsp" />
     </definition>
 
