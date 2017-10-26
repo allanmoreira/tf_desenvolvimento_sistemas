@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <div class="row">
-    <br><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_consulta">Nova Consulta</button><br><br>
+    <br><button type="button" class="btn btn-primary" id="btn_abre_modal_consulta" data-toggle="modal" data-target="#modal_consulta" disabled>Nova Consulta</button><br><br>
 </div>
 
 <div class="row">
@@ -11,8 +11,21 @@
         <div class="block full">
             <!-- Classic Chart Content -->
             <!-- Flot Charts (initialized in js/pages/compCharts.js), for more examples you can check out http://www.flotcharts.org/ -->
-            <div style="height: 300px;">
-                <canvas id="myChart" ></canvas>
+            <div id="div_grafico_fechamento" style="height: 300px;">
+                <canvas id="canvas_grafico_fechamento" ></canvas>
+            </div>
+            <!-- END Classic Chart Content -->
+        </div>
+        <!-- END Classic Chart Block -->
+    </div>
+
+    <div class="col-sm-6">
+        <!-- Classic Chart Block -->
+        <div class="block full">
+            <!-- Classic Chart Content -->
+            <!-- Flot Charts (initialized in js/pages/compCharts.js), for more examples you can check out http://www.flotcharts.org/ -->
+            <div id="div_grafico_volume" style="height: 300px;">
+                <canvas id="canvas_grafico_volume" ></canvas>
             </div>
             <!-- END Classic Chart Content -->
         </div>

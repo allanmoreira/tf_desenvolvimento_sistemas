@@ -6,22 +6,6 @@ $(document).ready(function () {
     div_limite_periodo = $('#div_limite_periodo');
 });
 
-function preencheGrafico(tituloGrafico, listaLabels, listaDados) {
-    new Chart(document.getElementById("myChart"),{
-        type:"line",
-        data:{
-            labels:listaLabels,
-            datasets:[{
-                label:tituloGrafico,
-                data:listaDados,
-                fill:false,
-                borderColor:"rgb(75, 192, 192)",
-                lineTension:0.1}
-            ]},
-        options:{}
-    });
-}
-
 function busca_moedas(){
     $.ajax({
         url: 'buscar_moedas',
@@ -39,6 +23,7 @@ function busca_moedas(){
                         text: lista[i].nome + ' (' + lista[i].sigla + ')'
                     }));
                 });
+                $('#btn_abre_modal_consulta').attr('disabled', false);
             }
             else {
                 abreNotificacao('warning',data.msgErro);
@@ -106,31 +91,37 @@ $('#select_periodo').change(function(){
 });
 
 $('#btn_buscar').click(function(){
+    var select_moeda = $('#select_moeda');
+    var select_periodo = $('#select_periodo');
     $.ajax({
         url: 'historico_moeda',
         async: true,
         type: 'POST',
         dataType: 'json',
         data: {
-            'id_moeda': $('#select_moeda').val(),
-            'periodo': $('#select_periodo').val(),
+            'id_moeda': select_moeda.val(),
+            'periodo': select_periodo.val(),
             'limite': $('#select_limite_periodo').val()
         },
         success: function(data){
             if(data.isValid) {
                 var lista = data.listaPeriodoHistorico;
-                console.log(lista);
-
-                var tituloGrafico = 'TESTE';
+                var nomeMoeda = select_moeda.find(":selected").text();
+                var txtPeriodo = select_periodo.find(":selected").text();
                 var listaLabels = [];
-                var listaDados = [];
+                var listaDadosFechamento = [];
+                var listaDadosVolume = [];
 
                 $.each(lista, function(i) {
                     listaLabels.push(lista[i].descricao);
-                    listaDados.push(lista[i].valor);
+                    listaDadosFechamento.push(lista[i].valorFechamento);
+                    listaDadosVolume.push(lista[i].valorVolume);
                 });
-
-                preencheGrafico(tituloGrafico, listaLabels, listaDados);
+                $('#modal_consulta').modal('hide');
+                $('#div_grafico_fechamento').html('<canvas id="canvas_grafico_fechamento" ></canvas>');
+                $('#div_grafico_volume').html('<canvas id="canvas_grafico_volume" ></canvas>');
+                preencheGrafico(nomeMoeda, listaLabels, 'Fechamento', listaDadosFechamento, 'canvas_grafico_fechamento', 'rgb(75, 192, 192)', txtPeriodo);
+                preencheGrafico(nomeMoeda, listaLabels, 'Volume', listaDadosVolume, 'canvas_grafico_volume', 'rgb(220, 47, 47)', txtPeriodo);
             }
             else {
                 abreNotificacao('warning',data.msgErro);
@@ -141,3 +132,52 @@ $('#btn_buscar').click(function(){
         }
     });
 });
+
+function preencheGrafico(nomeMoeda, listaLabels, txtDescricao, listaDados, id_grafico, rgb_cor, txtPeriodo) {
+    new Chart(document.getElementById(id_grafico),{
+        type:"line",
+        data:{
+            labels:listaLabels,
+            datasets:[
+                {
+                    label:txtDescricao,
+                    data:listaDados,
+                    fill:false,
+                    borderColor:rgb_cor,
+                    lineTension:0.1
+                }
+            ]
+        },
+        options:{
+            responsive: true,
+            title:{
+                display:true,
+                text:nomeMoeda
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: txtPeriodo
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Valor'
+                    }
+                }]
+            }
+        }
+    });
+}

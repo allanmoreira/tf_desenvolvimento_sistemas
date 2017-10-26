@@ -65,8 +65,8 @@ public class MoedaControle {
 
         diasSubtrair = limiteInt * qtdeDiasLimite;
         java.util.Date dataHoje = new DateTime().toDate();
-        DateTime dateTime = new DateTime(dataHoje);
-        Date dataLimite = new Date(dateTime.minusDays(diasSubtrair).toDate().getTime());
+        DateTime dataHojeDateTime = new DateTime(dataHoje);
+        Date dataLimite = new Date(dataHojeDateTime.minusDays(diasSubtrair).toDate().getTime());
 
         List<Moeda> listaMoeda = moedaDAO.selectAll(idMoedaInt);
 
@@ -85,7 +85,8 @@ public class MoedaControle {
 
         int cont = 0;
         String descricaoPeriodo = "";
-        BigDecimal valor = new BigDecimal(0);
+        BigDecimal valorFechamento = new BigDecimal(0);
+        BigDecimal valorVolume = new BigDecimal(0);
         PeriodoHistorico periodoHistorico;
         SimpleDateFormat formatoDataSQL = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -100,19 +101,21 @@ public class MoedaControle {
                 }
             }
 
-            valor = valor.add(historicoMoeda.getValorFechamento());
+            valorFechamento = valorFechamento.add(historicoMoeda.getValorFechamento());
+            valorVolume = valorVolume.add(historicoMoeda.getVolumeBTC());
 
             if(cont == qtdeDiasLimite-1){
-                valor = valor.divide(new BigDecimal(qtdeDiasLimite), 10, RoundingMode.HALF_EVEN);
+                valorFechamento = valorFechamento.divide(new BigDecimal(qtdeDiasLimite), 10, RoundingMode.HALF_EVEN);
+                valorVolume = valorVolume.divide(new BigDecimal(qtdeDiasLimite), 10, RoundingMode.HALF_EVEN);
 
                 if(periodo.equals("s")){
                     descricaoPeriodo = descricaoPeriodo + " a " + formatoDataSQL.format(historicoMoeda.getDataHistorico());
                 }
 
-                periodoHistorico = new PeriodoHistorico(descricaoPeriodo, valor);
+                periodoHistorico = new PeriodoHistorico(descricaoPeriodo, valorFechamento, valorVolume);
                 listaPeriodosHistorico.add(periodoHistorico);
                 descricaoPeriodo = "";
-                valor = new BigDecimal(0);
+                valorFechamento = new BigDecimal(0);
                 cont=0;
             } else {
                 cont++;

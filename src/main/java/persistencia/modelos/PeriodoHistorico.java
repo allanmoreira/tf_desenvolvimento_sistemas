@@ -4,11 +4,20 @@ import java.math.BigDecimal;
 
 public class PeriodoHistorico {
     private String descricao;
-    private BigDecimal valor;
+    private BigDecimal valorFechamento, valorVolume;
 
-    public PeriodoHistorico(String descricao, BigDecimal valor) {
+    public PeriodoHistorico(String descricao, BigDecimal valorFechamento, BigDecimal valorVolume) {
         this.descricao = descricao;
-        this.valor = valor;
+        this.valorFechamento = valorFechamento;
+        this.valorVolume = valorVolume;
+    }
+
+    public BigDecimal getValorVolume() {
+        return valorVolume;
+    }
+
+    public void setValorVolume(BigDecimal valorVolume) {
+        this.valorVolume = valorVolume;
     }
 
     public String getDescricao() {
@@ -19,11 +28,11 @@ public class PeriodoHistorico {
         this.descricao = descricao;
     }
 
-    public BigDecimal getValor() {
-        return valor;
+    public BigDecimal getValorFechamento() {
+        return valorFechamento;
     }
 
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
+    public void setValorFechamento(BigDecimal valorFechamento) {
+        this.valorFechamento = valorFechamento;
     }
 }
