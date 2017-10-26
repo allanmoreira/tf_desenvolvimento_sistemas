@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import persistencia.dao.InvestimentoDAO;
+import persistencia.modelos.Investimento;
 import persistencia.modelos.Moeda;
 import persistencia.modelos.PeriodoHistorico;
 import persistencia.modelos.Usuario;
@@ -48,6 +50,32 @@ public class InvestimentoServlet {
 
         map.put("isValid", isValid);
         map.put("msgErro", msgErro);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
+        response.getWriter().write(gson.toJson(map));
+    }
+
+    @RequestMapping(value="buscar_investimento", method = RequestMethod.POST)
+    public void buscarInvestimento(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Map<String, Object> map = new HashMap<>();
+        boolean isValid = false;
+        String msgErro = null;
+        List<Investimento> listaInvestimentos = null;
+//        String idInvestimento = request.getParameter("id_investimento");
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+        InvestimentoDAO investimentoDAO = new InvestimentoDAO();
+
+        try {
+            listaInvestimentos = investimentoDAO.selectAll(usuario.getIdUsuario());
+            isValid = true;
+        } catch (BDException e) {
+            msgErro = e.getMessage();
+        }
+
+        map.put("isValid", isValid);
+        map.put("msgErro", msgErro);
+        map.put("listaInvestimentos", listaInvestimentos);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();

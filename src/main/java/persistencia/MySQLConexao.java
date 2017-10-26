@@ -17,7 +17,8 @@ public class MySQLConexao {
     public static Connection conectar() throws SQLException, ClassNotFoundException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://198.199.105.36:3306/coin_counter_bd?zeroDateTimeBehavior=convertToNull";
+//            String url = "jdbc:mysql://198.199.105.36:3306/coin_counter_bd?zeroDateTimeBehavior=convertToNull";
+            String url = "jdbc:mysql://localhost:3306/coin_counter_bd?zeroDateTimeBehavior=convertToNull";
             String usuario = "trab_desenv_sistemas_usr";
             String senha = "coin_counter";
 

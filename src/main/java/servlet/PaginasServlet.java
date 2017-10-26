@@ -47,5 +47,12 @@ public class PaginasServlet {
         return mv;
     }
 
+    @RequestMapping("investimentos")
+    public ModelAndView investimentos() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("investimentos");
+        return mv;
+    }
+
 
 }

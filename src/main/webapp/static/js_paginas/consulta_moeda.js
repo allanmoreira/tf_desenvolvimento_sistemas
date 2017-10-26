@@ -3,6 +3,8 @@ var btn_invest_visivel = false;
 var div_limite_periodo;
 
 $(document).ready(function () {
+    $('#lista_menu_superior>li.active').removeClass('active');
+    $('#menu_consulta_moeda').addClass('active');
     busca_moedas();
     div_limite_periodo = $('#div_limite_periodo');
     $('#data_inicial').mask('99/99/9999');

@@ -47,4 +47,5 @@ public class InvestimentoControle {
         Investimento investimento = new Investimento(new Moeda(idMoedaInt), usuario, descricao, dataInicialDate, dataFinalDate, quantidadeBigDecimal);
         investimentoDAO.insert(investimento);
     }
+
 }

@@ -19,5 +19,12 @@
         <put-attribute name="conteudo_pagina" value="/WEB-INF/jsp/consulta_moeda.jsp" />
     </definition>
 
+    <definition name="investimentos" extends="layout_base" >
+        <put-attribute name="titulo_aba" value="Investimentos" />
+        <put-attribute name="titulo_pagina" value="Investimentos Cadastrados" />
+        <put-attribute name="sub_titulo_pagina" value="Investimentos Cadastrados" />
+        <put-attribute name="conteudo_pagina" value="/WEB-INF/jsp/investimentos.jsp" />
+    </definition>
+
 </tiles-definitions>
 

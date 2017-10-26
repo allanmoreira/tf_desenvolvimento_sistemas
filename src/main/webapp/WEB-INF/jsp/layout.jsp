@@ -48,10 +48,10 @@
             <a class="navbar-brand" href="home">Coin Counter</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
+            <ul id="lista_menu_superior" class="nav navbar-nav">
                 <li><a href="home">Início</a></li>
-                <li class="active"><a href="#">Lista de Dados</a></li>
-                <li><a href="#">Contato</a></li>
+                <li id="menu_consulta_moeda" class="active"><a href="consulta_moeda">Buscar Moedas</a></li>
+                <li id="menu_investimentos"><a href="investimentos">Investimentos</a></li>
             </ul>
             <ul class="nav navbar-nav pull-right">
                 <li class="dropdown">
