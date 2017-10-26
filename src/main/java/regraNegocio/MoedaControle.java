@@ -75,9 +75,12 @@ public class MoedaControle {
         } else {
             ArrayList<DadosBitTrex> listaDadosBitTrex;
             Date ultimaDataHistoricoMoeda = moedaDAO.ultimaDataHistoricoMoeda(idMoedaInt);
-            listaDadosBitTrex = atualizaHistoricoMoeda(listaMoeda.get(0).getSigla(), ultimaDataHistoricoMoeda);
-            if(listaDadosBitTrex.size() > 0)
-                moedaDAO.insert(idMoedaInt, listaDadosBitTrex);
+
+            if(dataHoje.compareTo(ultimaDataHistoricoMoeda) > 0) {
+                listaDadosBitTrex = atualizaHistoricoMoeda(listaMoeda.get(0).getSigla(), ultimaDataHistoricoMoeda);
+                if(listaDadosBitTrex.size() > 0)
+                    moedaDAO.insert(idMoedaInt, listaDadosBitTrex);
+            }
         }
 
         List<HistoricoMoeda> listaHistoricoMoedas = moedaDAO.selectHistoricoMoeda(idMoedaInt, new Date(dataHoje.getTime()), dataLimite);
