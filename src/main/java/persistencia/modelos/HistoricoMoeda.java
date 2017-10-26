@@ -6,9 +6,9 @@ import java.sql.Date;
 public class HistoricoMoeda {
     private int idMoeda;
     private BigDecimal valorAbertura, valorFechamento, valorAlta, valorBaixa, volumeMoeda, volumeBTC;
-    private Date data_historico;
+    private Date dataHistorico;
 
-    public HistoricoMoeda(int idMoeda, BigDecimal valorAbertura, BigDecimal valorFechamento, BigDecimal valorAlta, BigDecimal valorBaixa, BigDecimal volumeMoeda, BigDecimal volumeBTC, Date data_historico) {
+    public HistoricoMoeda(int idMoeda, BigDecimal valorAbertura, BigDecimal valorFechamento, BigDecimal valorAlta, BigDecimal valorBaixa, BigDecimal volumeMoeda, BigDecimal volumeBTC, Date dataHistorico) {
         this.idMoeda = idMoeda;
         this.valorAbertura = valorAbertura;
         this.valorFechamento = valorFechamento;
@@ -16,7 +16,7 @@ public class HistoricoMoeda {
         this.valorBaixa = valorBaixa;
         this.volumeMoeda = volumeMoeda;
         this.volumeBTC = volumeBTC;
-        this.data_historico = data_historico;
+        this.dataHistorico = dataHistorico;
     }
 
     public int getIdMoeda() {
@@ -75,11 +75,11 @@ public class HistoricoMoeda {
         this.volumeBTC = volumeBTC;
     }
 
-    public Date getData_historico() {
-        return data_historico;
+    public Date getDataHistorico() {
+        return dataHistorico;
     }
 
-    public void setData_historico(Date data_historico) {
-        this.data_historico = data_historico;
+    public void setDataHistorico(Date dataHistorico) {
+        this.dataHistorico = dataHistorico;
     }
 }

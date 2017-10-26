@@ -4,60 +4,22 @@ var div_limite_periodo;
 $(document).ready(function () {
     busca_moedas();
     div_limite_periodo = $('#div_limite_periodo');
-    preencheGrafico();
 });
 
-function preencheGrafico() {
-    var chartClassic    = $('#chart-classic');
-    var dataEarnings    = [[1, 1900], [2, 2300], [3, 3200], [4, 2500], [5, 4200], [6, 3100], [7, 3600], [8, 2500], [9, 4600], [10, 3700], [11, 4200], [12, 5200]];
-    var dataSales       = [[1, 850], [2, 750], [3, 1500], [4, 900], [5, 1500], [6, 1150], [7, 1500], [8, 900], [9, 1800], [10, 1700], [11, 1900], [12, 2550]];
-    var dataTickets     = [[1, 130], [2, 330], [3, 220], [4, 350], [5, 150], [6, 275], [7, 280], [8, 380], [9, 120], [10, 330], [11, 190], [12, 410]];
-    var dataMonths      = [[1, 'Jan'], [2, 'Feb'], [3, 'Mar'], [4, 'Apr'], [5, 'May'], [6, 'Jun'], [7, 'Jul'], [8, 'Aug'], [9, 'Sep'], [10, 'Oct'], [11, 'Nov'], [12, 'Dec']];
-    $.plot=function(placeholder,data,options){
-        var plot=new Plot($(placeholder),data,options,$.plot.plugins);
-        return plot
-    };
-
-    $.plot.version="0.8.3";
-    $.plot.plugins=[];
-    $.fn.plot=function(data,options){
-        return this.each(function(){
-            $.plot(this,data,options)
-        })
-    };
-
-    // function floorInBase(n,base){return base*Math.floor(n/base)}})(jQuery);
-
-    // Classic Chart
-    $.plot(chartClassic,
-        [
-            {
-                label: 'Earnings',
-                data: dataEarnings,
-                lines: {show: true, fill: true, fillColor: {colors: [{opacity: .6}, {opacity: .6}]}},
-                points: {show: true, radius: 5}
-            },
-            {
-                label: 'Sales',
-                data: dataSales,
-                lines: {show: true, fill: true, fillColor: {colors: [{opacity: .2}, {opacity: .2}]}},
-                points: {show: true, radius: 5}
-            },
-            {
-                label: 'Tickets',
-                data: dataTickets,
-                lines: {show: true, fill: true, fillColor: {colors: [{opacity: .2}, {opacity: .2}]}},
-                points: {show: true, radius: 5}
-            }
-        ],
-        {
-            colors: ['#5ccdde', '#454e59', '#ffffff'],
-            legend: {show: true, position: 'nw', backgroundOpacity: 0},
-            grid: {borderWidth: 0, hoverable: true, clickable: true},
-            yaxis: {tickColor: '#f5f5f5', ticks: 3},
-            xaxis: {ticks: dataMonths, tickColor: '#f5f5f5'}
-        }
-    );
+function preencheGrafico(tituloGrafico, listaLabels, listaDados) {
+    new Chart(document.getElementById("myChart"),{
+        type:"line",
+        data:{
+            labels:listaLabels,
+            datasets:[{
+                label:tituloGrafico,
+                data:listaDados,
+                fill:false,
+                borderColor:"rgb(75, 192, 192)",
+                lineTension:0.1}
+            ]},
+        options:{}
+    });
 }
 
 function busca_moedas(){
@@ -91,30 +53,43 @@ function busca_moedas(){
 $('#select_periodo').change(function(){
     var opcao = $(this).val();
     var txt_limite = '';
+    var qtde_limite;
     if(opcao === '0'){
         div_limite_periodo.slideToggle();
         select_periodo_aberto = false;
     } else {
         switch (opcao) {
             case 's':
-                txt_limite = 'Semanas';
+                txt_limite = 'Semana';
+                qtde_limite = 12;
                 break;
             case 'm':
-                txt_limite = 'Meses';
+                txt_limite = 'Mês';
+                qtde_limite = 36;
                 break;
             case 'a':
-                txt_limite = 'Anos';
+                txt_limite = 'Ano';
+                qtde_limite = 3;
                 break
         }
-        $('#label_limite_periodo').html('Limite de ' + txt_limite + ' da Pesquisa');
 
         var select_limite_periodo = $('#select_limite_periodo');
         select_limite_periodo.empty();
         select_limite_periodo.append($('<option>', {
             value: 0,
-            text: 'Seleciona uma opção...'
+            text: 'Selecione uma opção...'
         }));
-        for (var i = 1; i < 5; i++) {
+        select_limite_periodo.append($('<option>', {
+            value: 1,
+            text: '1 ' + txt_limite
+        }));
+
+        if(opcao === 'm')
+            txt_limite = 'Meses';
+        else
+            txt_limite += 's';
+
+        for (var i = 2; i < qtde_limite+1; i++) {
             select_limite_periodo.append($('<option>', {
                 value: i,
                 text: i + ' ' + txt_limite
@@ -125,6 +100,8 @@ $('#select_periodo').change(function(){
             div_limite_periodo.slideToggle();
             select_periodo_aberto = true;
         }
+
+        $('#label_limite_periodo').html('Limite de ' + txt_limite + ' da Pesquisa');
     }
 });
 
@@ -141,8 +118,19 @@ $('#btn_buscar').click(function(){
         },
         success: function(data){
             if(data.isValid) {
-                var lista = data.listaHistoricoMoeda;
+                var lista = data.listaPeriodoHistorico;
                 console.log(lista);
+
+                var tituloGrafico = 'TESTE';
+                var listaLabels = [];
+                var listaDados = [];
+
+                $.each(lista, function(i) {
+                    listaLabels.push(lista[i].descricao);
+                    listaDados.push(lista[i].valor);
+                });
+
+                preencheGrafico(tituloGrafico, listaLabels, listaDados);
             }
             else {
                 abreNotificacao('warning',data.msgErro);

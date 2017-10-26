@@ -4,16 +4,21 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
+import org.joda.time.DateTime;
 import org.springframework.web.client.RestTemplate;
 import persistencia.dao.MoedaDAO;
 import persistencia.modelos.DadosBitTrex;
 import persistencia.modelos.HistoricoMoeda;
 import persistencia.modelos.Moeda;
-import java.lang.reflect.Type;
+import persistencia.modelos.PeriodoHistorico;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MoedaControle {
     private MoedaDAO moedaDAO;
@@ -29,12 +34,40 @@ public class MoedaControle {
         return moedaDAO.selectAll(idMoedaInt);
     }
 
-    public List<HistoricoMoeda> buscaHistoricoMoeda(String idMoeda) throws BDException, ValidacaoException {
+    public List<PeriodoHistorico> buscaHistoricoMoeda(String idMoeda, String periodo, String limite) throws BDException, ValidacaoException {
         int idMoedaInt;
+        int limiteInt;
         if(idMoeda == null)
-            throw new ValidacaoException("Informe uma moeda válida!");
+            throw new ValidacaoException("Informe uma moeda!");
+        if(periodo == null)
+            throw new ValidacaoException("Informe um período!");
+        if(limite == null)
+            throw new ValidacaoException("Informe um limite!");
 
         idMoedaInt = Integer.valueOf(idMoeda);
+        limiteInt = Integer.valueOf(limite);
+
+        int diasSubtrair;
+        int qtdeDiasLimite;
+        switch (periodo) {
+            case "s":
+                qtdeDiasLimite = 7;
+                break;
+            case "m":
+                qtdeDiasLimite = 30;
+                break;
+            case "a":
+                qtdeDiasLimite = 365;
+                break;
+            default:
+                throw new ValidacaoException("Informe um período válido!");
+        }
+
+        diasSubtrair = limiteInt * qtdeDiasLimite;
+        java.util.Date dataHoje = new DateTime().toDate();
+        DateTime dateTime = new DateTime(dataHoje);
+        Date dataLimite = new Date(dateTime.minusDays(diasSubtrair).toDate().getTime());
+
         List<Moeda> listaMoeda = moedaDAO.selectAll(idMoedaInt);
 
         if(listaMoeda.size() == 0) {
@@ -47,7 +80,46 @@ public class MoedaControle {
                 moedaDAO.insert(idMoedaInt, listaDadosBitTrex);
         }
 
-        return moedaDAO.selectHistoricoMoeda(idMoedaInt);
+        List<HistoricoMoeda> listaHistoricoMoedas = moedaDAO.selectHistoricoMoeda(idMoedaInt, new Date(dataHoje.getTime()), dataLimite);
+        List<PeriodoHistorico> listaPeriodosHistorico = new ArrayList<>();
+
+        int cont = 0;
+        String descricaoPeriodo = "";
+        BigDecimal valor = new BigDecimal(0);
+        PeriodoHistorico periodoHistorico;
+        SimpleDateFormat formatoDataSQL = new SimpleDateFormat("dd/MM/yyyy");
+
+        for (HistoricoMoeda historicoMoeda : listaHistoricoMoedas) {
+            if(cont==0){
+                if(periodo.equals("s")){
+                    descricaoPeriodo = formatoDataSQL.format(historicoMoeda.getDataHistorico());
+                } else if(periodo.equals("m")){
+                    descricaoPeriodo = getMesDaData(historicoMoeda.getDataHistorico());
+                } else {
+                    descricaoPeriodo = String.valueOf(getAnoDaData(historicoMoeda.getDataHistorico()));
+                }
+            }
+
+            valor = valor.add(historicoMoeda.getValorFechamento());
+
+            if(cont == qtdeDiasLimite-1){
+                valor = valor.divide(new BigDecimal(qtdeDiasLimite), 10, RoundingMode.HALF_EVEN);
+
+                if(periodo.equals("s")){
+                    descricaoPeriodo = descricaoPeriodo + " a " + formatoDataSQL.format(historicoMoeda.getDataHistorico());
+                }
+
+                periodoHistorico = new PeriodoHistorico(descricaoPeriodo, valor);
+                listaPeriodosHistorico.add(periodoHistorico);
+                descricaoPeriodo = "";
+                valor = new BigDecimal(0);
+                cont=0;
+            } else {
+                cont++;
+            }
+        }
+
+        return listaPeriodosHistorico;
 
     }
 
@@ -70,5 +142,17 @@ public class MoedaControle {
         }
 
         return listaDadosBitTrex;
+    }
+
+    private String getMesDaData (Date dataSql) {
+        Locale local = new Locale("pt","BR");
+        DateTime novaData = new DateTime(dataSql);
+        return novaData.monthOfYear().getAsText(local);
+    }
+
+    private int getAnoDaData (Date dataSql) {
+        Locale local = new Locale("pt","BR");
+        DateTime novaData = new DateTime(dataSql);
+        return Integer.valueOf(novaData.yearOfEra().getAsText(local));
     }
 }

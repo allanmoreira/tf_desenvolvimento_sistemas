@@ -48,7 +48,7 @@ public class MoedaDAO {
         return listaMoedas;
     }
 
-    public List<HistoricoMoeda> selectHistoricoMoeda(int idMoeda) throws BDException {
+    public List<HistoricoMoeda> selectHistoricoMoeda(int idMoeda, Date dataHoje, Date dataLimite) throws BDException {
         List<HistoricoMoeda> listaHistoricoMoeda = new ArrayList<>();
         //language=MySQL
         String sql =
@@ -56,11 +56,16 @@ public class MoedaDAO {
                     "idMoeda, valorAbertura, valorFechamento, valorAlta, " +
                     "valorBaixa, volumeMoeda, volumeBTC, dataHistorico " +
                 "FROM HISTORICO_MOEDA " +
-                "WHERE idMoeda = ?";
+                "WHERE " +
+                    "idMoeda = ? AND " +
+                    "dataHistorico > ? AND " +
+                    "dataHistorico  <= ?";
 
         try (Connection conexao = MySQLConexao.conectar()) {
             try (PreparedStatement preparedStatement = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setInt(1, idMoeda);
+                preparedStatement.setDate(2, dataLimite);
+                preparedStatement.setDate(3, dataHoje);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
                     HistoricoMoeda historicoMoeda = new HistoricoMoeda(

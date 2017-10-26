@@ -9,20 +9,18 @@
     <div class="col-sm-6">
         <!-- Classic Chart Block -->
         <div class="block full">
-            <!-- Classic Chart Title -->
-            <div class="block-title">
-                <h2>Classic</h2>
-            </div>
-            <!-- END Classic Chart Title -->
-
             <!-- Classic Chart Content -->
             <!-- Flot Charts (initialized in js/pages/compCharts.js), for more examples you can check out http://www.flotcharts.org/ -->
-            <div id="chart-classic" style="height: 380px;"></div>
+            <div style="height: 300px;">
+                <canvas id="myChart" ></canvas>
+            </div>
             <!-- END Classic Chart Content -->
         </div>
         <!-- END Classic Chart Block -->
     </div>
 </div>
+
+<br>
 
 <!-- Modal -->
 <div class="modal fade" id="modal_consulta" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
