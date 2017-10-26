@@ -1,9 +1,13 @@
 var select_periodo_aberto = false;
+var btn_invest_visivel = false;
 var div_limite_periodo;
 
 $(document).ready(function () {
     busca_moedas();
     div_limite_periodo = $('#div_limite_periodo');
+    $('#data_inicial').mask('99/99/9999');
+    $('#data_final').mask('99/99/9999');
+    $('#quantidade').numeric({ altDecimal: ".", decimal : "," });
 });
 
 function busca_moedas(){
@@ -16,9 +20,16 @@ function busca_moedas(){
         success: function(data){
             if(data.isValid) {
                 var lista = data.listaMoedas;
+
                 var select = $('#select_moeda');
+                var select_moeda_investimento = $('#select_moeda_investimento');
                 $.each(lista, function(i) {
                     select.append($('<option>', {
+                        value: lista[i].idMoeda,
+                        text: lista[i].nome + ' (' + lista[i].sigla + ')'
+                    }));
+
+                    select_moeda_investimento.append($('<option>', {
                         value: lista[i].idMoeda,
                         text: lista[i].nome + ' (' + lista[i].sigla + ')'
                     }));
@@ -93,6 +104,7 @@ $('#select_periodo').change(function(){
 $('#btn_buscar').click(function(){
     var select_moeda = $('#select_moeda');
     var select_periodo = $('#select_periodo');
+    var btn_modal_investimento = $('#btn_abre_modal_investimento');
     $.ajax({
         url: 'historico_moeda',
         async: true,
@@ -109,6 +121,8 @@ $('#btn_buscar').click(function(){
                 var nomeMoeda = select_moeda.find(":selected").text();
                 var txtPeriodo = select_periodo.find(":selected").text();
                 $('#sub_titulo_pagina').html(nomeMoeda);
+                $('#moeda_selecionada').val(nomeMoeda);
+                $('#titulo_modal_investimento').html('Investimento - '+nomeMoeda);
                 var listaLabels = [];
                 var listaDadosFechamento = [];
                 var listaDadosVolume = [];
@@ -119,6 +133,12 @@ $('#btn_buscar').click(function(){
                     listaDadosVolume.push(lista[i].valorVolume);
                 });
                 $('#modal_consulta').modal('hide');
+
+                if(!btn_invest_visivel) {
+                    btn_modal_investimento.slideToggle();
+                    btn_invest_visivel = true;
+                }
+
                 $('#div_grafico_fechamento').html('<canvas id="canvas_grafico_fechamento" ></canvas>');
                 $('#div_grafico_volume').html('<canvas id="canvas_grafico_volume" ></canvas>');
                 preencheGrafico(nomeMoeda, listaLabels, 'Fechamento', listaDadosFechamento, 'canvas_grafico_fechamento', 'rgb(75, 192, 192)', txtPeriodo);
@@ -182,3 +202,27 @@ function preencheGrafico(nomeMoeda, listaLabels, txtDescricao, listaDados, id_gr
         }
     });
 }
+
+$('#btn_salvar_investimento').click(function(){
+    $.ajax({
+        url: 'novo_investimento',
+        async: true,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'id_moeda': $('#select_moeda').val(),
+            'descricao': $('#descricao').val(),
+            'data_inicial': $('#data_inicial').val(),
+            'data_final': $('#data_final').val(),
+            'quantidade': $('#quantidade').val()
+        },
+        success: function(data){
+            if(data.isValid) {
+                abreNotificacao('warning','Investimento salvo com sucesso!');
+            }
+        },
+        error: function (data) {
+            abreNotificacao('danger', 'Houve uma falha para realizar a operação! Contate o administrador do sistema!');
+        }
+    });
+});

@@ -4,7 +4,9 @@ public class Usuario {
     private int idUsuario;
     private String nome, email, senha;
 
-    public Usuario() {}
+    public Usuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 
     public Usuario(int idUsuario, String nome, String email, String senha) {
         this.idUsuario = idUsuario;

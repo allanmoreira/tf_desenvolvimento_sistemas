@@ -2,7 +2,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <div class="row">
-    <br><button type="button" class="btn btn-primary" id="btn_abre_modal_consulta" data-toggle="modal" data-target="#modal_consulta" disabled>Nova Consulta</button><br><br>
+    <br><button type="button" class="btn btn-primary" id="btn_abre_modal_consulta"
+                data-toggle="modal" data-target="#modal_consulta" disabled>Nova Consulta</button>
+
+    <button type="button" class="btn btn-success" id="btn_abre_modal_investimento" style="display: none"
+                data-toggle="modal" data-target="#modal_investir">Investir</button><br><br>
 </div>
 
 <div class="row">
@@ -41,7 +45,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Novo Dado</h4>
+                <h4 class="modal-title" id="myModalLabel">Buscar Moeda</h4>
             </div>
             <div class="modal-body">
                 <form>
@@ -70,6 +74,47 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" id="btn_buscar">Buscar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="modal_investir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="titulo_modal_investimento"></h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label class="control-label">Moeda</label>
+                        <input class="form-control disabled" id="moeda_selecionada" disabled/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Descrição</label>
+                        <textarea class="form-control" rows="3" id="descricao"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" >Data Inicial</label>
+                        <input class="form-control" id="data_inicial"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" >Data Final</label>
+                        <input class="form-control" id="data_final"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" >Valor</label>
+                        <input class="form-control" id="quantidade"/>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="btn_salvar_investimento">Salvar</button>
             </div>
         </div>
     </div>

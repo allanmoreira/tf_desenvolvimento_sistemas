@@ -79,6 +79,8 @@
 <script src="<c:url value="/static/plugins/notificacao.js"/>"></script>
 <script src="<c:url value="/static/plugins/loading_ajax.js"/>"></script>
 <script src="<c:url value="/static/plugins/Chart.bundle.js"/>"></script>
+<script src="<c:url value="/static/plugins/jquery.maskedinput.js"/>"></script>
+<script src="<c:url value="/static/plugins/jquery.numeric.min.js"/>"></script>
 
 <div class="container">
     <div class="row">
@@ -91,7 +93,7 @@
     <hr>
 
     <footer>
-        <p>&copy; 2016 Company, Inc.</p>
+        <p>&copy; 2017 Coin Counter, Inc.</p>
     </footer>
 </div> <!-- /container -->
 

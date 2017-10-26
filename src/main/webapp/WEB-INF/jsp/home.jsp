@@ -90,7 +90,7 @@
     <hr>
 
     <footer>
-        <p>&copy; 2016 Company, Inc.</p>
+        <p>&copy; 2017 Coin Counter, Inc.</p>
     </footer>
 </div> <!-- /container -->
 

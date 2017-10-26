@@ -7,6 +7,10 @@ public class Moeda {
     private String nome, sigla;
     private BigDecimal valor;
 
+    public Moeda(int idMoeda) {
+        this.idMoeda = idMoeda;
+    }
+
     public Moeda(int idMoeda, String nome, String sigla, BigDecimal valor) {
         this.idMoeda = idMoeda;
         this.nome = nome;
