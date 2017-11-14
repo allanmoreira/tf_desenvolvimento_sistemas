@@ -44,12 +44,15 @@ public class UsuarioDAO {
                 "FROM "+
                     "USUARIOS " +
                 "WHERE "+
-                    "Email = ? AND " +
-                    "Senha = ?";
+                    "Email = ? ";
+        if(senha != null)
+            sql += "AND Senha = ?";
+
         try (Connection conexao = MySQLConexao.conectar()) {
             try (PreparedStatement preparedStatement = conexao.prepareStatement(sql)) {
                 preparedStatement.setString(1, email);
-                preparedStatement.setString(2, senha);
+                if(senha != null)
+                    preparedStatement.setString(2, senha);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if(resultSet.next()){
                         usuario = new Usuario(
@@ -91,5 +94,32 @@ public class UsuarioDAO {
             throw new BDException(ex.getMessage());
         }
         return emailExistente;
+    }
+
+    public boolean emailCadastroFirebase(String email) throws BDException {
+        boolean origemFirebase = false;
+        //language=MySQL
+        String sql =
+                "SELECT "+
+                    "Senha "+
+                "FROM "+
+                    "USUARIOS " +
+                "WHERE "+
+                    "Email = ?";
+        try (Connection conexao = MySQLConexao.conectar()) {
+            try (PreparedStatement preparedStatement = conexao.prepareStatement(sql)) {
+                preparedStatement.setString(1, email);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if(resultSet.next()) {
+                        if(resultSet.getString("Senha") == null)
+                            origemFirebase = true;
+                    }
+                }
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            logger.error(ex.getMessage());
+            throw new BDException(ex.getMessage());
+        }
+        return origemFirebase;
     }
 }

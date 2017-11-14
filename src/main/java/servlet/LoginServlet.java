@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import persistencia.dao.UsuarioDAO;
 import persistencia.modelos.Usuario;
 import regraNegocio.BDException;
 import regraNegocio.LoginControle;
@@ -38,6 +39,44 @@ public class LoginServlet {
             session.setAttribute("usuarioLogado", usuario);
             isValid = true;
         } catch (ValidacaoException | BDException e) {
+            msgErro = e.getMessage();
+        }
+
+        map.put("isValid", isValid);
+        map.put("msgErro", msgErro);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
+        response.getWriter().write(gson.toJson(map));
+    }
+
+    @RequestMapping(value="login_usuario_firebase", method = RequestMethod.POST)
+    public void loginUsuarioFirebase(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Map<String, Object> map = new HashMap<>();
+        boolean isValid = false;
+        String msgErro = null;
+
+        String nome = request.getParameter("nome");
+        String email = request.getParameter("email");
+
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+
+        try {
+            Usuario usuario;
+            boolean emailExistente = usuarioDAO.emailExistente(email);
+
+            if(!emailExistente){
+                usuario = new Usuario(nome, email, null);
+                int idUsuario = usuarioDAO.insert(usuario);
+                usuario.setIdUsuario(idUsuario);
+            } else {
+                usuario = usuarioDAO.selectByEmailSenha(email, null);
+            }
+
+            session.setAttribute("usuarioLogado", usuario);
+            isValid = true;
+
+        } catch (BDException e) {
             msgErro = e.getMessage();
         }
 

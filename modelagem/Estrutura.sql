@@ -59,3 +59,5 @@ INSERT INTO MOEDAS (idMoeda, Nome, Sigla, Valor) VALUES (2, 'Reddcoin', 'RDD', 0
 INSERT INTO MOEDAS (idMoeda, Nome, Sigla, Valor) VALUES (3, 'BitcoinCash', 'BCH', 0.05821169);
 INSERT INTO MOEDAS (idMoeda, Nome, Sigla, Valor) VALUES (4, 'Ethereum', 'ETH', 0.05427384);
 INSERT INTO MOEDAS (idMoeda, Nome, Sigla, Valor) VALUES (5, 'Safe Exchange', 'LTC', 0.00000171);
+
+ALTER TABLE USUARIOS MODIFY COLUMN Senha VARCHAR(24);

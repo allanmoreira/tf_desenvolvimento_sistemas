@@ -30,6 +30,9 @@ public class LoginControle {
                 throw new ValidacaoException("A senha deve ter no máximo 50 caracteres!");
             usuario = new Usuario(nome, email, senha);
         } else {
+            boolean origemFirebase = usuarioDAO.emailCadastroFirebase(email);
+            if(origemFirebase)
+                throw new ValidacaoException("Email já cadastrado usando login com Google ou Facebook!");
             throw new ValidacaoException("Email já cadastrado!");
         }
         return usuarioDAO.insert(usuario);

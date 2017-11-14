@@ -7,6 +7,14 @@ $('#btn_logar').click(function(){
     enviaFormulario();
 });
 
+$('#btn_login_google').click(function () {
+    buscaDadosFirebase('google');
+});
+
+$('#btn_login_facebook').click(function () {
+    buscaDadosFirebase('facebook');
+});
+
 function enviaFormulario() {
     var email = $('#email').val();
     var senha = $('#senha').val();
@@ -34,3 +42,5 @@ function enviaFormulario() {
         }
     });
 }
+
+

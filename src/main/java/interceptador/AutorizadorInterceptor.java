@@ -11,7 +11,7 @@ public class AutorizadorInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object controller) throws Exception {
 				
 		String uri = request.getRequestURI();
-		if (uri.endsWith("home") || uri.endsWith("login") || uri.endsWith("efetuar_login") ||
+		if (uri.endsWith("home") || uri.endsWith("login") || uri.endsWith("efetuar_login") || uri.endsWith("login_usuario_firebase") ||
 				uri.endsWith("registro") || uri.endsWith("registrar_usuario") ||
 				uri.contains("static")) {
 			return true;
