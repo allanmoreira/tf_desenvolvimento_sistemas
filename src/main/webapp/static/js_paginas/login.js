@@ -19,28 +19,32 @@ function enviaFormulario() {
     var email = $('#email').val();
     var senha = $('#senha').val();
 
-    $.ajax({
-        url: 'efetuar_login',
-        async: true,
-        type: 'POST',
-        dataType: 'json',
-        data: {email:email, senha:senha},
-        success: function(data){
-            if(data.isValid) {
-                abreNotificacao('success', 'Login efetuado com sucesso!');
-                setTimeout(function(){
-                    window.location = 'home';
-                }, 1000);
+    if(!validaEmail(email)){
+        abreNotificacao('warning', 'Informe um email válido!');
+    } else {
+        $.ajax({
+            url: 'efetuar_login',
+            async: true,
+            type: 'POST',
+            dataType: 'json',
+            data: {email: email, senha: senha},
+            success: function (data) {
+                if (data.isValid) {
+                    abreNotificacao('success', 'Login efetuado com sucesso!');
+                    setTimeout(function () {
+                        window.location = 'home';
+                    }, 1000);
 
+                }
+                else {
+                    abreNotificacao('warning', data.msgErro);
+                }
+            },
+            error: function (data) {
+                abreNotificacao('danger', 'Houve uma falha para realizar a operação! Contate o administrador do sistema!');
             }
-            else {
-                abreNotificacao('warning', data.msgErro);
-            }
-        },
-        error: function (data) {
-            abreNotificacao('danger', 'Houve uma falha para realizar a operação! Contate o administrador do sistema!');
-        }
-    });
+        });
+    }
 }
 
 

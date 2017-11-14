@@ -74,6 +74,7 @@
 <script src="<c:url value="/static/plugins/loading_ajax.js"/>"></script>
 <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
 <script src="<c:url value="/static/js_paginas/firebase.js"/>"></script>
+<script src="<c:url value="/static/js/validacao.js"/>"></script>
 <script src="<c:url value="/static/js_paginas/login.js"/>"></script>
 </body>
 </html>
