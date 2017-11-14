@@ -22,19 +22,21 @@ function buscaDadosFirebase(tipo) {
         provider = new firebase.auth.FacebookAuthProvider();
         msgErro = 'Houve um erro ao conectar a conta do Facebook';
     }
+
+    provider.addScope('profile');
+    provider.addScope('email');
+
     firebase.auth().signInWithPopup(provider).then(function(result) {
         var user = result.user;
         console.log(user);
 
-        if(tipo === 'google') {
-            nome = user.displayName;
-            email = user.email;
-        } else if(tipo === 'facebook') {
+        if (user.providerData.length === 0){
+            abreNotificacao('danger', 'Não é possível se autenticar com esse serviço!');
+        } else {
             nome = user.providerData[0].displayName;
             email = user.providerData[0].email;
+            loginFirebase();
         }
-
-        loginFirebase();
     }).catch(function(error) {
         console.log(error);
         abreNotificacao('danger', msgErro);

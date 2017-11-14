@@ -7,6 +7,14 @@ $('#btn_registrar').click(function(){
     enviaFormulario();
 });
 
+$('#btn_login_google').click(function () {
+    buscaDadosFirebase('google');
+});
+
+$('#btn_login_facebook').click(function () {
+    buscaDadosFirebase('facebook');
+});
+
 function enviaFormulario() {
     var nome = $('#nome').val();
     var email = $('#email').val();

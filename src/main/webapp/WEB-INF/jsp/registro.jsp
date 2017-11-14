@@ -12,13 +12,15 @@
     <meta name="author" content="">
     <link rel="icon" href="<c:url value="/static/css/favicon.ico" />">
 
-    <title>Login - Coin Counter</title>
+    <title>Registro - Coin Counter</title>
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/static/css/bootstrap.css" />" rel="stylesheet">
+    <link href="<c:url value="/static/fonts/font-awesome.min.css" />" rel="stylesheet">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="<c:url value="/static/css/ie10-viewport-bug-workaround.css" />" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="<c:url value="/static/css/signin.css" />" rel="stylesheet">
+    <link href="<c:url value="/static/css/bootstrap-social.css" />" rel="stylesheet">
 </head>
 
 <body>
@@ -43,6 +45,25 @@
         </div>
 
         <button class="btn btn-lg btn-primary btn-block" id="btn_registrar" type="button">Registrar</button>
+
+        <br>
+        <div class="social-box">
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="#" id="btn_login_google" title="Google" class="btn btn-block btn-social btn-google btn-lg">
+                        <i class="fa fa-google"></i> Login com Google
+                    </a>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="#" id="btn_login_facebook" title="Facebook" class="btn btn-block btn-social btn-facebook btn-lg">
+                        <i class="fa fa-facebook"></i> Login com Facebook
+                    </a>
+                </div>
+            </div>
+        </div>
     </form>
 
 </div> <!-- /container -->
@@ -53,6 +74,8 @@
 <script src="<c:url value="/static/plugins/bootstrap-notify.js"/>"></script>
 <script src="<c:url value="/static/plugins/notificacao.js"/>"></script>
 <script src="<c:url value="/static/plugins/loading_ajax.js"/>"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+<script src="<c:url value="/static/js_paginas/firebase.js"/>"></script>
 <script src="<c:url value="/static/js/validacao.js"/>"></script>
 <script src="<c:url value="/static/js_paginas/registro.js"/>"></script>
 </body>
