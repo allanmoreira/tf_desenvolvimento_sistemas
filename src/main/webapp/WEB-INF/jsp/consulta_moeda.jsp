@@ -113,12 +113,13 @@
                         <input class="form-control" id="data_final"/>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" >Valor</label>
+                        <label class="control-label" >Quantidade</label>
                         <input class="form-control" id="quantidade"/>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-success pull-left" id="btn_simular_investimento">Simular</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" id="btn_salvar_investimento">Salvar</button>
             </div>

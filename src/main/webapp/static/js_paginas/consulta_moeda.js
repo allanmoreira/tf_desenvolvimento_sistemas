@@ -4,6 +4,13 @@ var div_limite_periodo;
 var mediaVolumeMoeda;
 var mediafechamentoMoeda;
 var div_sugestao_aberta = false;
+var listaDadosFechamento = [];
+var listaDadosVolume = [];
+var idMoeda;
+var descricao;
+var dataInicial;
+var dataFinal;
+var quantidade;
 
 $(document).ready(function () {
     $('#lista_menu_superior>li.active').removeClass('active');
@@ -136,6 +143,7 @@ $('#btn_buscar').click(function(){
             },
             success: function (data) {
                 if (data.isValid) {
+                    idMoeda = select_moeda.val();
                     var lista = data.listaPeriodoHistorico;
                     var nomeMoeda = select_moeda.find(":selected").text();
                     var txtPeriodo = select_periodo.find(":selected").text();
@@ -143,8 +151,8 @@ $('#btn_buscar').click(function(){
                     $('#moeda_selecionada').val(nomeMoeda);
                     $('#titulo_modal_investimento').html('Investimento - ' + nomeMoeda);
                     var listaLabels = [];
-                    var listaDadosFechamento = [];
-                    var listaDadosVolume = [];
+                    listaDadosFechamento = [];
+                    listaDadosVolume = [];
                     var somatorioVolume = 0;
                     var somatorioFechamento = 0;
 
@@ -171,7 +179,7 @@ $('#btn_buscar').click(function(){
                     preencheGrafico(nomeMoeda, listaLabels, 'Fechamento', listaDadosFechamento, 'canvas_grafico_fechamento', 'rgb(75, 192, 192)', txtPeriodo);
                     preencheGrafico(nomeMoeda, listaLabels, 'Volume', listaDadosVolume, 'canvas_grafico_volume', 'rgb(220, 47, 47)', txtPeriodo);
 
-                    $('#texto_sugestao').html('O melhor momento para investir em <strong>' + nomeMoeda + '</strong> é quando a moeda estiver com valor no mínimo de <strong>' + mediafechamentoMoeda + '</strong> para o período.');
+                    $('#texto_sugestao').html('O melhor momento para investir em <strong>' + nomeMoeda + '</strong> é quando a moeda estiver com quantidade no mínimo de <strong>' + mediafechamentoMoeda + '</strong> para o período.');
                     $('#div_sugestao').slideToggle();
                     div_sugestao_aberta = true;
                 }
@@ -236,21 +244,24 @@ function preencheGrafico(nomeMoeda, listaLabels, txtDescricao, listaDados, id_gr
 }
 
 $('#btn_salvar_investimento').click(function(){
+    pegaDadosInvestimento();
     $.ajax({
         url: 'novo_investimento',
         async: true,
         type: 'POST',
         dataType: 'json',
         data: {
-            'id_moeda': $('#select_moeda').val(),
-            'descricao': $('#descricao').val(),
-            'data_inicial': $('#data_inicial').val(),
-            'data_final': $('#data_final').val(),
-            'quantidade': $('#quantidade').val()
+            'id_moeda': idMoeda,
+            'descricao': descricao,
+            'data_inicial': dataInicial,
+            'data_final': dataFinal,
+            'quantidade': quantidade
         },
         success: function(data){
             if(data.isValid) {
-                abreNotificacao('warning','Investimento salvo com sucesso!');
+                abreNotificacao('success','Investimento salvo com sucesso!');
+            } else {
+                abreNotificacao('warning',data.msgErro);
             }
         },
         error: function (data) {
@@ -258,3 +269,37 @@ $('#btn_salvar_investimento').click(function(){
         }
     });
 });
+/*
+$('#btn_simular_investimento').click(function(){
+    pegaDadosInvestimento();
+    $.ajax({
+        url: 'simular_investimento',
+        async: true,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'id_moeda': idMoeda,
+            'descricao': descricao,
+            'data_inicial': dataInicial,
+            'data_final': dataFinal,
+            'quantidade': quantidade
+        },
+        success: function(data){
+            if(data.isValid) {
+                console.log(data);
+            } else {
+                abreNotificacao('warning',data.msgErro);
+            }
+        },
+        error: function (data) {
+            abreNotificacao('danger', 'Houve uma falha para realizar a operação! Contate o administrador do sistema!');
+        }
+    });
+});
+*/
+function pegaDadosInvestimento() {
+    descricao = $('#descricao').val();
+    dataInicial = $('#data_inicial').val();
+    dataFinal = $('#data_final').val();
+    quantidade = $('#quantidade').val();
+}

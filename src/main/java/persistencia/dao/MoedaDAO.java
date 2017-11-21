@@ -48,7 +48,7 @@ public class MoedaDAO {
         return listaMoedas;
     }
 
-    public List<HistoricoMoeda> selectHistoricoMoeda(int idMoeda, Date dataHoje, Date dataLimite) throws BDException {
+    public List<HistoricoMoeda> selectHistoricoMoeda(int idMoeda, Date dataInicial, Date dataFinal) throws BDException {
         List<HistoricoMoeda> listaHistoricoMoeda = new ArrayList<>();
         //language=MySQL
         String sql =
@@ -64,8 +64,8 @@ public class MoedaDAO {
         try (Connection conexao = MySQLConexao.conectar()) {
             try (PreparedStatement preparedStatement = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setInt(1, idMoeda);
-                preparedStatement.setDate(2, dataLimite);
-                preparedStatement.setDate(3, dataHoje);
+                preparedStatement.setDate(2, dataFinal);
+                preparedStatement.setDate(3, dataInicial);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
                     HistoricoMoeda historicoMoeda = new HistoricoMoeda(
