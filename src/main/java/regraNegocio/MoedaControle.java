@@ -75,8 +75,9 @@ public class MoedaControle {
         } else {
             ArrayList<DadosBitTrex> listaDadosBitTrex;
             Date ultimaDataHistoricoMoeda = moedaDAO.ultimaDataHistoricoMoeda(idMoedaInt);
+            DateTime ultimaDataHistoricoMoedaDateTime = new DateTime(ultimaDataHistoricoMoeda);
 
-            if(dataHoje.compareTo(ultimaDataHistoricoMoeda) > 0) {
+            if(ultimaDataHistoricoMoeda == null || dataHojeDateTime.toLocalDate().compareTo(ultimaDataHistoricoMoedaDateTime.toLocalDate()) > 0) {
                 listaDadosBitTrex = atualizaHistoricoMoeda(listaMoeda.get(0).getSigla(), ultimaDataHistoricoMoeda);
                 if(listaDadosBitTrex.size() > 0)
                     moedaDAO.insert(idMoedaInt, listaDadosBitTrex);
@@ -129,7 +130,7 @@ public class MoedaControle {
 
     }
 
-    private ArrayList<DadosBitTrex> atualizaHistoricoMoeda(String siglaMoeda, Date ultimaDataHistoricoMoeda) {
+    private ArrayList<DadosBitTrex> atualizaHistoricoMoeda(String siglaMoeda, Date ultimaDataHistoricoMoeda) throws ValidacaoException {
         ArrayList<DadosBitTrex> listaDadosBitTrex = new ArrayList<>();
         RestTemplate restTemplate = new RestTemplate();
 
@@ -138,6 +139,9 @@ public class MoedaControle {
                 String.class
         );
         JsonObject jsonObject = new Gson().fromJson(respostaServidor, JsonObject.class);
+        if(!jsonObject.get("success").getAsBoolean())
+            throw new ValidacaoException("Houve um erro ao buscar a moeda na API bitrex: " + jsonObject.get("message").toString());
+
         JsonArray jsonArray = jsonObject.get("result").getAsJsonArray();
 
         for (int i = 0; i < jsonArray.size(); i++) {

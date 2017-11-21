@@ -106,54 +106,74 @@ $('#select_periodo').change(function(){
 $('#btn_buscar').click(function(){
     var select_moeda = $('#select_moeda');
     var select_periodo = $('#select_periodo');
-    var btn_modal_investimento = $('#btn_abre_modal_investimento');
-    $.ajax({
-        url: 'historico_moeda',
-        async: true,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            'id_moeda': select_moeda.val(),
-            'periodo': select_periodo.val(),
-            'limite': $('#select_limite_periodo').val()
-        },
-        success: function(data){
-            if(data.isValid) {
-                var lista = data.listaPeriodoHistorico;
-                var nomeMoeda = select_moeda.find(":selected").text();
-                var txtPeriodo = select_periodo.find(":selected").text();
-                $('#sub_titulo_pagina').html(nomeMoeda);
-                $('#moeda_selecionada').val(nomeMoeda);
-                $('#titulo_modal_investimento').html('Investimento - '+nomeMoeda);
-                var listaLabels = [];
-                var listaDadosFechamento = [];
-                var listaDadosVolume = [];
+    var select_limite_periodo = $('#select_limite_periodo');
 
-                $.each(lista, function(i) {
-                    listaLabels.push(lista[i].descricao);
-                    listaDadosFechamento.push(lista[i].valorFechamento);
-                    listaDadosVolume.push(lista[i].valorVolume);
-                });
-                $('#modal_consulta').modal('hide');
+    console.log();
+    console.log();
+    console.log();
 
-                if(!btn_invest_visivel) {
-                    btn_modal_investimento.slideToggle();
-                    btn_invest_visivel = true;
+    if(select_moeda.val() === '0'){
+        abreNotificacao('warning', 'Informe a moeda!');
+    } else if(select_periodo.val() === '0'){
+        abreNotificacao('warning', 'Informe o período!');
+    } else if(select_limite_periodo.val() === '0'){
+        abreNotificacao('warning', 'Informe o limite do período!');
+    } else {
+        var btn_modal_investimento = $('#btn_abre_modal_investimento');
+        $.ajax({
+            url: 'historico_moeda',
+            async: true,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'id_moeda': select_moeda.val(),
+                'periodo': select_periodo.val(),
+                'limite': select_limite_periodo.val()
+            },
+            success: function (data) {
+                if (data.isValid) {
+                    var lista = data.listaPeriodoHistorico;
+                    var nomeMoeda = select_moeda.find(":selected").text();
+                    var txtPeriodo = select_periodo.find(":selected").text();
+                    $('#sub_titulo_pagina').html(nomeMoeda);
+                    $('#moeda_selecionada').val(nomeMoeda);
+                    $('#titulo_modal_investimento').html('Investimento - ' + nomeMoeda);
+                    var listaLabels = [];
+                    var listaDadosFechamento = [];
+                    var listaDadosVolume = [];
+
+
+                    $.each(lista, function (i) {
+                        var valorFechamento = lista[i].valorFechamento;
+                        var valorVolume = lista[i].valorVolume;
+                        var media = (valorFechamento + valorVolume) / 2;
+                        console.log(lista[i]);
+                        console.log(media);
+                        listaLabels.push(lista[i].descricao);
+                        listaDadosFechamento.push(valorFechamento);
+                        listaDadosVolume.push(valorVolume);
+                    });
+                    $('#modal_consulta').modal('hide');
+
+                    if (!btn_invest_visivel) {
+                        btn_modal_investimento.slideToggle();
+                        btn_invest_visivel = true;
+                    }
+
+                    $('#div_grafico_fechamento').html('<canvas id="canvas_grafico_fechamento" ></canvas>');
+                    $('#div_grafico_volume').html('<canvas id="canvas_grafico_volume" ></canvas>');
+                    preencheGrafico(nomeMoeda, listaLabels, 'Fechamento', listaDadosFechamento, 'canvas_grafico_fechamento', 'rgb(75, 192, 192)', txtPeriodo);
+                    preencheGrafico(nomeMoeda, listaLabels, 'Volume', listaDadosVolume, 'canvas_grafico_volume', 'rgb(220, 47, 47)', txtPeriodo);
                 }
-
-                $('#div_grafico_fechamento').html('<canvas id="canvas_grafico_fechamento" ></canvas>');
-                $('#div_grafico_volume').html('<canvas id="canvas_grafico_volume" ></canvas>');
-                preencheGrafico(nomeMoeda, listaLabels, 'Fechamento', listaDadosFechamento, 'canvas_grafico_fechamento', 'rgb(75, 192, 192)', txtPeriodo);
-                preencheGrafico(nomeMoeda, listaLabels, 'Volume', listaDadosVolume, 'canvas_grafico_volume', 'rgb(220, 47, 47)', txtPeriodo);
+                else {
+                    abreNotificacao('warning', data.msgErro);
+                }
+            },
+            error: function (data) {
+                abreNotificacao('danger', 'Houve uma falha para realizar a operação! Contate o administrador do sistema!');
             }
-            else {
-                abreNotificacao('warning',data.msgErro);
-            }
-        },
-        error: function (data) {
-            abreNotificacao('danger', 'Houve uma falha para realizar a operação! Contate o administrador do sistema!');
-        }
-    });
+        });
+    }
 });
 
 function preencheGrafico(nomeMoeda, listaLabels, txtDescricao, listaDados, id_grafico, rgb_cor, txtPeriodo) {
