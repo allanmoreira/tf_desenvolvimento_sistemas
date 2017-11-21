@@ -9,6 +9,12 @@
                 data-toggle="modal" data-target="#modal_investir">Investir</button><br><br>
 </div>
 
+<div class="row" id="div_sugestao" style="display: none;">
+    <div class="col-sm-12 col-md-offset-1">
+        <h5 id="texto_sugestao"></h5>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-sm-6">
         <!-- Classic Chart Block -->

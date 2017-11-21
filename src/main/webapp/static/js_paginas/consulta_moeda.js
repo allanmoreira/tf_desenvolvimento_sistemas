@@ -1,6 +1,9 @@
 var select_periodo_aberto = false;
 var btn_invest_visivel = false;
 var div_limite_periodo;
+var mediaVolumeMoeda;
+var mediafechamentoMoeda;
+var div_sugestao_aberta = false;
 
 $(document).ready(function () {
     $('#lista_menu_superior>li.active').removeClass('active');
@@ -108,9 +111,10 @@ $('#btn_buscar').click(function(){
     var select_periodo = $('#select_periodo');
     var select_limite_periodo = $('#select_limite_periodo');
 
-    console.log();
-    console.log();
-    console.log();
+    if(div_sugestao_aberta){
+        $('#div_sugestao').slideToggle();
+        div_sugestao_aberta = false;
+    }
 
     if(select_moeda.val() === '0'){
         abreNotificacao('warning', 'Informe a moeda!');
@@ -141,18 +145,20 @@ $('#btn_buscar').click(function(){
                     var listaLabels = [];
                     var listaDadosFechamento = [];
                     var listaDadosVolume = [];
-
+                    var somatorioVolume = 0;
+                    var somatorioFechamento = 0;
 
                     $.each(lista, function (i) {
-                        var valorFechamento = lista[i].valorFechamento;
-                        var valorVolume = lista[i].valorVolume;
-                        var media = (valorFechamento + valorVolume) / 2;
-                        console.log(lista[i]);
-                        console.log(media);
+                        somatorioVolume += lista[i].valorVolume;
+                        somatorioFechamento += lista[i].valorFechamento;
                         listaLabels.push(lista[i].descricao);
-                        listaDadosFechamento.push(valorFechamento);
-                        listaDadosVolume.push(valorVolume);
+                        listaDadosFechamento.push(lista[i].valorFechamento);
+                        listaDadosVolume.push(lista[i].valorVolume);
                     });
+
+                    mediaVolumeMoeda = somatorioVolume / lista.length;
+                    mediafechamentoMoeda = somatorioFechamento / lista.length;
+
                     $('#modal_consulta').modal('hide');
 
                     if (!btn_invest_visivel) {
@@ -164,6 +170,10 @@ $('#btn_buscar').click(function(){
                     $('#div_grafico_volume').html('<canvas id="canvas_grafico_volume" ></canvas>');
                     preencheGrafico(nomeMoeda, listaLabels, 'Fechamento', listaDadosFechamento, 'canvas_grafico_fechamento', 'rgb(75, 192, 192)', txtPeriodo);
                     preencheGrafico(nomeMoeda, listaLabels, 'Volume', listaDadosVolume, 'canvas_grafico_volume', 'rgb(220, 47, 47)', txtPeriodo);
+
+                    $('#texto_sugestao').html('O melhor momento para investir em <strong>' + nomeMoeda + '</strong> é quando a moeda estiver com valor no mínimo de <strong>' + mediafechamentoMoeda + '</strong> para o período.');
+                    $('#div_sugestao').slideToggle();
+                    div_sugestao_aberta = true;
                 }
                 else {
                     abreNotificacao('warning', data.msgErro);
