@@ -4,6 +4,7 @@ var div_limite_periodo;
 var mediaVolumeMoeda;
 var mediafechamentoMoeda;
 var div_sugestao_aberta = false;
+var div_resultado_simulacao_aberta = false;
 var listaDadosFechamento = [];
 var listaDadosVolume = [];
 var idMoeda;
@@ -20,6 +21,17 @@ $(document).ready(function () {
     $('#data_inicial').mask('99/99/9999');
     $('#data_final').mask('99/99/9999');
     $('#quantidade').numeric({ altDecimal: ".", decimal : "," });
+});
+
+$("#modal_investir").on("hidden.bs.modal", function () {
+    if(div_resultado_simulacao_aberta) {
+        $('#div_resultado_simulacao').slideToggle();
+        div_resultado_simulacao_aberta = false;
+    }
+    $('#descricao').val('');
+    $('#data_inicial').val('');
+    $('#data_final').val('');
+    $('#quantidade').val('');
 });
 
 function busca_moedas(){
@@ -179,7 +191,7 @@ $('#btn_buscar').click(function(){
                     preencheGrafico(nomeMoeda, listaLabels, 'Fechamento', listaDadosFechamento, 'canvas_grafico_fechamento', 'rgb(75, 192, 192)', txtPeriodo);
                     preencheGrafico(nomeMoeda, listaLabels, 'Volume', listaDadosVolume, 'canvas_grafico_volume', 'rgb(220, 47, 47)', txtPeriodo);
 
-                    $('#texto_sugestao').html('O melhor momento para investir em <strong>' + nomeMoeda + '</strong> é quando a moeda estiver com quantidade no mínimo de <strong>' + mediafechamentoMoeda + '</strong> para o período.');
+                    $('#texto_sugestao').html('O melhor momento para investir em <strong>' + nomeMoeda + '</strong> é quando a moeda estiver com fechamento no mínimo de <strong>' + mediafechamentoMoeda + '</strong> para o período.');
                     $('#div_sugestao').slideToggle();
                     div_sugestao_aberta = true;
                 }
@@ -245,61 +257,112 @@ function preencheGrafico(nomeMoeda, listaLabels, txtDescricao, listaDados, id_gr
 
 $('#btn_salvar_investimento').click(function(){
     pegaDadosInvestimento();
-    $.ajax({
-        url: 'novo_investimento',
-        async: true,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            'id_moeda': idMoeda,
-            'descricao': descricao,
-            'data_inicial': dataInicial,
-            'data_final': dataFinal,
-            'quantidade': quantidade
-        },
-        success: function(data){
-            if(data.isValid) {
-                abreNotificacao('success','Investimento salvo com sucesso!');
-            } else {
-                abreNotificacao('warning',data.msgErro);
+    if(validaData(dataInicial) && validaData(dataFinal) && periodoDataValido(dataInicial, dataFinal)) {
+        $.ajax({
+            url: 'novo_investimento',
+            async: true,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'id_moeda': idMoeda,
+                'descricao': descricao,
+                'data_inicial': dataInicial,
+                'data_final': dataFinal,
+                'quantidade': quantidade
+            },
+            success: function (data) {
+                if (data.isValid) {
+                    $('#modal_investir').modal('hide');
+                    $('#div_resultado_simulacao').slideToggle();
+                    div_resultado_simulacao_aberta = false;
+                    $('#descricao').val('');
+                    $('#data_inicial').val('');
+                    $('#data_final').val('');
+                    $('#quantidade').val('');
+                    abreNotificacao('success', 'Investimento salvo com sucesso!');
+                } else {
+                    abreNotificacao('warning', data.msgErro);
+                }
+            },
+            error: function (data) {
+                abreNotificacao('danger', 'Houve uma falha para realizar a operação! Contate o administrador do sistema!');
             }
-        },
-        error: function (data) {
-            abreNotificacao('danger', 'Houve uma falha para realizar a operação! Contate o administrador do sistema!');
-        }
-    });
+        });
+    }
 });
-/*
+
 $('#btn_simular_investimento').click(function(){
+    if(div_resultado_simulacao_aberta){
+        $('#div_resultado_simulacao').slideToggle();
+        div_resultado_simulacao_aberta = false;
+    }
     pegaDadosInvestimento();
-    $.ajax({
-        url: 'simular_investimento',
-        async: true,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            'id_moeda': idMoeda,
-            'descricao': descricao,
-            'data_inicial': dataInicial,
-            'data_final': dataFinal,
-            'quantidade': quantidade
-        },
-        success: function(data){
-            if(data.isValid) {
-                console.log(data);
-            } else {
-                abreNotificacao('warning',data.msgErro);
+    if(validaData(dataInicial) && validaData(dataFinal) && periodoDataValido(dataInicial, dataFinal)) {
+        $.ajax({
+            url: 'simular_investimento',
+            async: true,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'id_moeda': idMoeda,
+                'descricao': descricao,
+                'data_inicial': dataInicial,
+                'data_final': dataFinal,
+                'quantidade': quantidade
+            },
+            success: function (data) {
+                if (data.isValid) {
+                    console.log(data);
+                    var txt_sugestao = '';
+                    if (data.simulacaoinvestimento.aceitavel)
+                        txt_sugestao = 'É aconselhado <strong>investir</strong> o valor no período.';
+                    else
+                        txt_sugestao = 'É aconselhado <strong>NÃO INVESTIR</strong> o valor no período.';
+
+                    var div_resultado_simulacao = $('#div_resultado_simulacao');
+                    div_resultado_simulacao.html('A moeda teve o valor de fechamento, em média, de <strong>' + data.simulacaoinvestimento.mediaPeriodo + '</strong> entre ' +
+                        dataInicial.substring(0, 5) + ' e ' + dataFinal.substring(0, 5) + ' nos últimos três anos. ' + txt_sugestao);
+                    div_resultado_simulacao.slideToggle();
+                    div_resultado_simulacao_aberta = true;
+                } else {
+                    abreNotificacao('warning', data.msgErro);
+                }
+            },
+            error: function (data) {
+                abreNotificacao('danger', 'Houve uma falha para realizar a operação! Contate o administrador do sistema!');
             }
-        },
-        error: function (data) {
-            abreNotificacao('danger', 'Houve uma falha para realizar a operação! Contate o administrador do sistema!');
-        }
-    });
+        });
+    }
 });
-*/
+
 function pegaDadosInvestimento() {
     descricao = $('#descricao').val();
     dataInicial = $('#data_inicial').val();
     dataFinal = $('#data_final').val();
     quantidade = $('#quantidade').val();
+}
+
+function validaData(data) {
+    var RegExPattern = /^((((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])      [\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))|(((0[1-9]|[12]\d|3[01])(0[13578]|1[02])((1[6-9]|[2-9]\d)?\d{2}))|((0[1-9]|[12]\d|30)(0[13456789]|1[012])((1[6-9]|[2-9]\d)?\d{2}))|((0[1-9]|1\d|2[0-8])02((1[6-9]|[2-9]\d)?\d{2}))|(2902((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00))))$/;
+
+    if (!((data.match(RegExPattern)) && (data!=''))) {
+        abreNotificacao('warning', 'Informe uma data válida!');
+        return false;
+    }
+    return true;
+}
+
+function periodoDataValido(dataInicialStr, dataFinalStr) {
+    var partesData;
+    partesData = dataInicialStr.split("/");
+    var dataInicial = new Date(partesData[2], partesData[1] - 1, partesData[0]);
+
+    partesData = dataFinalStr.split("/");
+    var dataFinal = new Date(partesData[2], partesData[1] - 1, partesData[0]);
+
+    if(dataInicial > dataFinal){
+        abreNotificacao('warning', 'A data inicial deve ser menor que a final');
+        return false;
+    }
+    return true;
 }

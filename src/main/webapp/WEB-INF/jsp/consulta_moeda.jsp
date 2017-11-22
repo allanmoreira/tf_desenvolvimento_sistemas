@@ -95,6 +95,8 @@
                 <h4 class="modal-title" id="titulo_modal_investimento"></h4>
             </div>
             <div class="modal-body">
+                <div id="div_resultado_simulacao" class="alert alert-success" style="display: none; text-align: center"></div>
+
                 <form>
                     <div class="form-group">
                         <label class="control-label">Moeda</label>
